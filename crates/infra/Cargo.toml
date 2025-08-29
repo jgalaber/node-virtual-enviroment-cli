@@ -1,0 +1,19 @@
+[package]
+name = "nve-infra"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+nve-core = { path = "../core" }
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+async-trait.workspace = true
+tar = "0.4.44"
+xz2 = "0.1.7"
+walkdir = "2.5.0"
+tempfile = "3.21.0"
