@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-set -e
-
-echo "🧪 pre-push: cargo test --workspace"
-cargo test --workspace
-
-echo "✅ pre-push OK"
