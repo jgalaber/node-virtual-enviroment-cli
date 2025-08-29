@@ -6,7 +6,9 @@ use serde::de::DeserializeOwned;
 pub struct ReqwestHttp(pub reqwest::Client);
 
 impl Default for ReqwestHttp {
-    fn default() -> Self { Self(reqwest::Client::new()) }
+    fn default() -> Self {
+        Self(reqwest::Client::new())
+    }
 }
 
 #[async_trait]

@@ -89,6 +89,9 @@ impl NveError {
     }
 
     pub fn archive_name_build_failed(os: impl Into<String>, arch: impl Into<String>) -> Self {
-        NveError::ArchiveNameBuildFailed { os: os.into(), arch: arch.into() }
+        NveError::ArchiveNameBuildFailed {
+            os: os.into(),
+            arch: arch.into(),
+        }
     }
 }

@@ -7,7 +7,9 @@ use std::path::{Path, PathBuf};
 pub struct WindowsPlatform;
 
 impl WindowsPlatform {
-    pub fn new() -> Result<Self, NveError> { Ok(Self) }
+    pub fn new() -> Result<Self, NveError> {
+        Ok(Self)
+    }
 }
 
 #[async_trait]
@@ -15,7 +17,14 @@ impl Platform for WindowsPlatform {
     fn os_arch(&self) -> (String, String) {
         // os: "win", arch: "x64" | "arm64"
         let os = "win".to_string();
-        let arch = if cfg!(target_arch = "x86_64") { "x64" } else if cfg!(target_arch = "aarch64") { "arm64" } else { "x64" }.to_string();
+        let arch = if cfg!(target_arch = "x86_64") {
+            "x64"
+        } else if cfg!(target_arch = "aarch64") {
+            "arm64"
+        } else {
+            "x64"
+        }
+        .to_string();
         (os, arch)
     }
 
@@ -40,13 +49,16 @@ impl Platform for WindowsPlatform {
 
 fn copy_dir_recursive(from: &Path, to: &Path) -> Result<(), NveError> {
     for entry in walkdir::WalkDir::new(from) {
-        let entry = entry.map_err(|e| NveError::Io(std::io::Error::new(std::io::ErrorKind::Other, e)))?;
+        let entry =
+            entry.map_err(|e| NveError::Io(std::io::Error::new(std::io::ErrorKind::Other, e)))?;
         let rel = entry.path().strip_prefix(from).unwrap();
         let dest = to.join(rel);
         if entry.file_type().is_dir() {
             fs::create_dir_all(&dest)?;
         } else {
-            if let Some(p) = dest.parent() { fs::create_dir_all(p)?; }
+            if let Some(p) = dest.parent() {
+                fs::create_dir_all(p)?;
+            }
             fs::copy(entry.path(), &dest)?;
         }
     }

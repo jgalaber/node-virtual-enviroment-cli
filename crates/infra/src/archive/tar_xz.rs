@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use nve_core::error::NveError;
 use nve_core::ports::archive::Archive;
 use std::fs::{self};
-use std::io::{Cursor};
+use std::io::Cursor;
 use std::path::Path;
 use tar::Archive as TarArchive;
 use xz2::read::XzDecoder;
@@ -10,12 +10,19 @@ use xz2::read::XzDecoder;
 pub struct TarXzArchive;
 
 impl TarXzArchive {
-    pub fn new() -> Result<Self, NveError> { Ok(Self) }
+    pub fn new() -> Result<Self, NveError> {
+        Ok(Self)
+    }
 }
 
 #[async_trait]
 impl Archive for TarXzArchive {
-    async fn extract(&self, data: &[u8], target_dir: &Path, _version: &str) -> Result<(), NveError> {
+    async fn extract(
+        &self,
+        data: &[u8],
+        target_dir: &Path,
+        _version: &str,
+    ) -> Result<(), NveError> {
         use tempfile::tempdir;
 
         let tmp = tempdir()?;

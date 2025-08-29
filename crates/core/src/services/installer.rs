@@ -1,11 +1,11 @@
 use crate::domain::version::ParsedVersion;
 use crate::error::NveError;
+use crate::ports::archive::Archive;
+use crate::ports::fs::FileSystem;
+use crate::ports::http::HttpClient;
+use crate::ports::platform::Platform;
 use crate::services::ResolveService;
 use crate::state::layout::NveLayout;
-use crate::ports::http::HttpClient;
-use crate::ports::fs::FileSystem;
-use crate::ports::platform::Platform;
-use crate::ports::archive::Archive;
 
 use crate::constants::NODEJS_API_BASE;
 
@@ -18,12 +18,17 @@ pub struct InstallService<'a, H, F, P, A> {
 }
 impl<'a, H, F, P, A> InstallService<'a, H, F, P, A>
 where
-    H: HttpClient, F: FileSystem, P: Platform, A: Archive,
+    H: HttpClient,
+    F: FileSystem,
+    P: Platform,
+    A: Archive,
 {
     pub async fn install(&self, spec: &ParsedVersion) -> Result<String, NveError> {
-        let exact = ResolveService{ http: self.http }.resolve(spec).await?;
+        let exact = ResolveService { http: self.http }.resolve(spec).await?;
         let version_dir = self.layout.version_dir(&exact);
-        if self.fs.exists(&version_dir) { return Ok(exact); }
+        if self.fs.exists(&version_dir) {
+            return Ok(exact);
+        }
 
         let url = {
             let name = self.plat.archive_name(&exact);

@@ -6,7 +6,15 @@ use std::path::{Path, PathBuf};
 pub struct StdFs;
 
 impl StdFs {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
+}
+
+impl Default for StdFs {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl FileSystem for StdFs {
@@ -50,13 +58,15 @@ impl FileSystem for StdFs {
         }
         fs::create_dir_all(to)?;
         for entry in walkdir::WalkDir::new(from) {
-            let entry = entry.map_err(|e| NveError::Io(std::io::Error::new(std::io::ErrorKind::Other, e)))?;
+            let entry = entry.map_err(|e| NveError::Io(std::io::Error::other(e)))?;
             let rel: PathBuf = entry.path().strip_prefix(from).unwrap().into();
             let dest = to.join(&rel);
             if entry.file_type().is_dir() {
                 fs::create_dir_all(&dest)?;
             } else {
-                if let Some(parent) = dest.parent() { fs::create_dir_all(parent)?; }
+                if let Some(parent) = dest.parent() {
+                    fs::create_dir_all(parent)?;
+                }
                 fs::copy(entry.path(), &dest)?;
             }
         }

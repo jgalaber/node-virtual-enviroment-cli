@@ -2,21 +2,35 @@ use async_trait::async_trait;
 use nve_core::error::NveError;
 use nve_core::ports::platform::Platform;
 use std::fs;
-use std::path::{Path};
 use std::os::unix::fs as unix_fs;
+use std::path::Path;
 
 pub struct UnixPlatform;
 
 impl UnixPlatform {
-    pub fn new() -> Result<Self, NveError> { Ok(Self) }
+    pub fn new() -> Result<Self, NveError> {
+        Ok(Self)
+    }
 }
 
 #[async_trait]
 impl Platform for UnixPlatform {
     fn os_arch(&self) -> (String, String) {
         // os: "linux" | "darwin", arch: "x64" | "arm64"
-        let os = if cfg!(target_os = "macos") { "darwin" } else { "linux" }.to_string();
-        let arch = if cfg!(target_arch = "x86_64") { "x64" } else if cfg!(target_arch = "aarch64") { "arm64" } else { "x64" }.to_string();
+        let os = if cfg!(target_os = "macos") {
+            "darwin"
+        } else {
+            "linux"
+        }
+        .to_string();
+        let arch = if cfg!(target_arch = "x86_64") {
+            "x64"
+        } else if cfg!(target_arch = "aarch64") {
+            "arm64"
+        } else {
+            "x64"
+        }
+        .to_string();
         (os, arch)
     }
 

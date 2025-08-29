@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -e
+
+cog verify --from-file "$1"
