@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 set -e
+cog verify --file "$1"
 
-cog verify --from-file "$1"
