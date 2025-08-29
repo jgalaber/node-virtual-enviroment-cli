@@ -112,7 +112,7 @@ cargo test
 
 ## 🔄 Submitting a Pull Request
 
-1. Create a branch from `main`.
+1. Create a branch from `develop`.
 2. Make your changes and commit them.
 3. Push your branch:
 
@@ -120,7 +120,7 @@ cargo test
    git push origin feature/my-feature
    ```
 
-4. Open a Pull Request (PR) to `main` in GitHub.
+4. Open a Pull Request (PR) to `develop` in GitHub.
 5. Ensure all CI checks pass.
 
 ---
