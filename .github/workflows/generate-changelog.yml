@@ -1,0 +1,47 @@
+name: Generate Changelog
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  changelog:
+    name: Update CHANGELOG.md
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # importante para tener el historial completo
+
+      - name: Set up Rust (para instalar git-cliff)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # necesario para `actions/setup-python` si usas otros scripts
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install git-cliff
+        run: cargo install git-cliff
+
+      - name: Generate CHANGELOG.md
+        run: git cliff -o CHANGELOG.md
+
+      - name: Commit & Push if changed
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet; then
+            echo "No changes in CHANGELOG.md"
+          else
+            git add CHANGELOG.md
+            git commit -m "docs(changelog): update changelog [skip ci]"
+            git push
+          fi
