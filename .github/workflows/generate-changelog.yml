@@ -5,6 +5,10 @@ on:
     branches:
       - develop
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   changelog:
     name: Update CHANGELOG.md
@@ -14,12 +18,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # importante para tener el historial completo
-
-      - name: Set up Rust (para instalar git-cliff)
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'  # necesario para `actions/setup-python` si usas otros scripts
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
@@ -33,15 +33,12 @@ jobs:
       - name: Generate CHANGELOG.md
         run: git cliff -o CHANGELOG.md
 
-      - name: Commit & Push if changed
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          if git diff --quiet; then
-            echo "No changes in CHANGELOG.md"
-          else
-            git add CHANGELOG.md
-            git commit -m "docs(changelog): update changelog [skip ci]"
-            git push
-          fi
+      - name: Create Pull Request with updated changelog
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "docs(changelog): update changelog [skip ci]"
+          title: "chore: update CHANGELOG.md"
+          body: "Automated changelog update."
+          branch: bot/update-changelog
+          base: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
