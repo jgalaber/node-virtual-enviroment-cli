@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   changelog:
@@ -32,15 +33,12 @@ jobs:
       - name: Generate CHANGELOG.md
         run: git cliff -o CHANGELOG.md
 
-      - name: Commit & Push if changed
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          if git diff --quiet; then
-            echo "No changes in CHANGELOG.md"
-          else
-            git add CHANGELOG.md
-            git commit -m "docs(changelog): update changelog [skip ci]"
-            git push origin HEAD:develop
-          fi
+      - name: Create Pull Request with updated changelog
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "docs(changelog): update changelog [skip ci]"
+          title: "chore: update CHANGELOG.md"
+          body: "Automated changelog update."
+          branch: bot/update-changelog
+          base: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
