@@ -1,4 +1,5 @@
 name: CI
+
 on:
   pull_request:
     branches: [ develop ]
@@ -11,6 +12,48 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
       - run: cargo fmt --all -- --check
       - run: cargo clippy --workspace --all-targets -- -D warnings
-      - run: cargo test --workspace
+      - run: cargo test --workspace --all-targets
+
+  coverage:
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo-llvm-cov
+        run: cargo install cargo-llvm-cov --locked
+
+      - name: Run coverage
+        run: |
+          cargo llvm-cov --workspace --all-features --html --lcov --output-path lcov.info
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html-${{ matrix.os }}
+          path: target/llvm-cov/html
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload LCOV
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov-${{ matrix.os }}
+          path: lcov.info
+          if-no-files-found: error
+          retention-days: 7
