@@ -42,8 +42,8 @@ jobs:
         run: cargo llvm-cov --workspace --all-features --html
 
       - name: Coverage (LCOV)
-        run: cargo llvm-cov --workspace --all-features --lcov --output-path lcov.info --no-clean --no-run
-
+        run: cargo llvm-cov --workspace --all-features --lcov --output-path lcov.info
+        
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
