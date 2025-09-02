@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -38,24 +38,5 @@ jobs:
       - name: Install cargo-llvm-cov
         run: cargo install cargo-llvm-cov --locked
 
-      - name: Coverage (HTML)
-        run: cargo llvm-cov --workspace --all-features --html
-
-      - name: Coverage (LCOV)
-        run: cargo llvm-cov --workspace --all-features --lcov --output-path lcov.info
-        
-      - name: Upload HTML report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-html-${{ matrix.os }}
-          path: target/llvm-cov/html
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Upload LCOV
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-lcov-${{ matrix.os }}
-          path: lcov.info
-          if-no-files-found: error
-          retention-days: 7
+      - name: Coverage threshold (>= 80% lines)
+        run: cargo llvm-cov --workspace --all-features --text --fail-under-lines 80
