@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, main ]
   push:
     branches: [ develop, main ]
 
@@ -38,9 +38,11 @@ jobs:
       - name: Install cargo-llvm-cov
         run: cargo install cargo-llvm-cov --locked
 
-      - name: Run coverage
-        run: |
-          cargo llvm-cov --workspace --all-features --html --lcov --output-path lcov.info
+      - name: Coverage (HTML)
+        run: cargo llvm-cov --workspace --all-features --html
+
+      - name: Coverage (LCOV)
+        run: cargo llvm-cov --workspace --all-features --lcov --output-path lcov.info --no-clean --no-run
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
