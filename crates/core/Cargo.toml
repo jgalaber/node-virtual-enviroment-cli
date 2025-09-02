@@ -14,3 +14,10 @@ semver.workspace = true
 tokio.workspace = true
 reqwest.workspace = true
 async-trait.workspace = true
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+pretty_assertions = "1"
+tempfile = "3"
+nve-infra = { path = "../infra" }
+
