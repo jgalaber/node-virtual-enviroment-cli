@@ -50,11 +50,7 @@ enum Commands {
 #[tokio::main]
 async fn main() -> Result<(), NveError> {
     let cli = Cli::parse();
-
-    let base = dirs::home_dir()
-        .ok_or(NveError::HomeDirNotFound)?
-        .join(".nve");
-    let layout = NveLayout { base };
+    let layout = NveLayout::from_env_or_home()?;
 
     let httpc = ReqwestHttp::default();
     let fs = StdFs::new();
