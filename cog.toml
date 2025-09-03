@@ -1,5 +1,16 @@
-[conventional]
-types = ["feat", "fix", "docs", "style", "refactor", "perf", "test", "build", "ci", "chore", "revert"]
-
-[git]
 tag_prefix = "v"
+ignore_merge_commits = true
+
+[commit_types]
+feat     = { changelog_title = "Features" }
+fix      = { changelog_title = "Bug Fixes" }
+docs     = { changelog_title = "Docs", omit_from_changelog = true }
+style    = { changelog_title = "Style", omit_from_changelog = true }
+refactor = { changelog_title = "Refactoring" }
+perf     = { changelog_title = "Performance" }
+test     = { changelog_title = "Tests", omit_from_changelog = true }
+build    = { changelog_title = "Build" }
+ci       = { changelog_title = "CI" }
+chore    = { changelog_title = "Chores", omit_from_changelog = true }
+revert   = { changelog_title = "Reverts" }
+merge    = { changelog_title = "Merges", omit_from_changelog = true }

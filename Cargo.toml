@@ -22,3 +22,11 @@ semver = "1"
 tokio = { version = "1", features = ["full"] }
 reqwest = { version = "0.12", features = ["rustls-tls", "json"] }
 async-trait = "0.1"
+
+[workspace.dev-dependencies]
+assert_cmd = "2"
+predicates = "3"
+nve-infra = { path = "../infra" }
+tempfile = "3"
+pretty_assertions = "1"
+cargo-llvm-cov = { version = "0.6", default-features = false }
