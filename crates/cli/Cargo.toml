@@ -23,3 +23,6 @@ assert_cmd = "2"
 async-trait = "0.1"
 serde = { version = "1", features = ["derive"] }
 predicates = { version = "3", features = ["diff"] }
+
+[target.'cfg(windows)'.dependencies]
+windows = "0.54"

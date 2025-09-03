@@ -6,7 +6,8 @@ license.workspace = true
 authors.workspace = true
 
 [target.'cfg(windows)'.dependencies]
-junction = "1" 
+junction = "1"
+windows = "0.54"
 
 [dependencies]
 nve-core = { path = "../core" }
