@@ -56,19 +56,6 @@ pub enum NveError {
     #[error("Error resolviendo nombre de archivo del artefacto para la plataforma {os}-{arch}")]
     ArchiveNameBuildFailed { os: String, arch: String },
 
-    // --------- Windows ---------
-    #[cfg(windows)]
-    #[error("Error de registro de Windows durante '{op}': {source}")]
-    WindowsRegistry {
-        op: &'static str,
-        #[source]
-        source: windows::core::Error,
-    },
-
-    #[cfg(windows)]
-    #[error("No se pudo notificar cambio de entorno a Windows (WM_SETTINGCHANGE)")]
-    WindowsBroadcastEnvFailed,
-
     // --------- Unix ---------
     #[cfg(unix)]
     #[error("No se pudo crear/actualizar enlace simbólico: {0}")]
